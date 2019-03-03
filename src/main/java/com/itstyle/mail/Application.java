@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
 import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 /**
  * 启动类
  * 创建者 科帮网 https://blog.52itstyle.com
@@ -24,7 +26,8 @@ import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
  */
 @SpringBootApplication
 @EnableDubboConfiguration
-@ImportResource({"classpath:spring-context-task.xml"})
+@EnableScheduling
+//@ImportResource({"classpath:spring-context-task.xml"})
 public class Application  {
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 	

@@ -1,12 +1,18 @@
 package com.itstyle.mail.service.impl;
 
 import java.io.File;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
+import com.itstyle.mail.common.util.CronUtil;
+import com.itstyle.mail.common.util.SerializeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +22,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.ResourceUtils;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.itstyle.mail.common.dynamicquery.DynamicQuery;
 import com.itstyle.mail.common.model.Email;
 import com.itstyle.mail.common.model.Result;
@@ -55,7 +61,7 @@ public class MailServiceImpl implements IMailService {
 	
 	
 	@Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 	
 	static {
 		 System.setProperty("mail.mime.splitlongparameters","false");
@@ -76,8 +82,8 @@ public class MailServiceImpl implements IMailService {
 	public void sendHtml(Email mail) throws Exception {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		//这里可以自定义发信名称比如：爪哇笔记
-		helper.setFrom(USER_NAME,"爪哇笔记");
+		//这里可以自定义发信名称比如：测试邮件
+		helper.setFrom(USER_NAME,"测试邮件");
 		helper.setTo(mail.getEmail());
 		helper.setSubject(mail.getSubject());
 		helper.setText(
@@ -100,8 +106,8 @@ public class MailServiceImpl implements IMailService {
 	public void sendFreemarker(Email mail) throws Exception {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		//这里可以自定义发信名称比如：爪哇笔记
-		helper.setFrom(USER_NAME,"爪哇笔记");
+		//这里可以自定义发信名称比如：测试邮件
+		helper.setFrom(USER_NAME,"测试邮件");
 		helper.setTo(mail.getEmail());
 		helper.setSubject(mail.getSubject());
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -144,5 +150,24 @@ public class MailServiceImpl implements IMailService {
 	public Result listMail(Email mail) {
 		List<OaEmail> list =  mailRepository.findAll();
 		return Result.ok(list);
+	}
+
+	@Override
+	public Result scheduleMail(Email email, String dateStr) {
+		/*
+		* 编写cron到Date的转换工具类
+		* */
+		Date date;
+		String cronKey;
+		try {
+			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr);
+			cronKey = CronUtil.toCron(date);
+			redisTemplate.opsForList().rightPush("cronKeys", cronKey);
+			redisTemplate.opsForList().rightPush(cronKey, email);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error();
+		}
+		return Result.ok();
 	}
 }

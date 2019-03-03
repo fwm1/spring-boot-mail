@@ -23,9 +23,6 @@
                  border-radius: 6px;">
                 <table width="100%" style="border: none">
                     <tr>
-                        <td style="width: 20%; text-align: center; padding-top: 25px">
-                            <img src="${path}/image/icon_email_prompt.png" alt="">
-                        </td>
                         <td colspan="2" style="font-size: 18px; line-height: 1.6;padding-top: 30px">
                             <div style="text-indent: 36px; padding-right: 24px">
                                  ${mail.content}
@@ -43,35 +40,6 @@
                             height: auto;
                             zoom: 1;
                             overflow: auto;">
-            <table style="width: 100%">
-                <tr>
-                    <td style="width: 60%">
-                        <h4 style="font-size: 16px;
-                             margin: 10px 0;">
-                          科帮网科技服务有限公司
-                        </h4>
-                        <p>
-                            公司地址：
-                            <b>宇宙银河系太阳系地球村88号</b>
-                        </p>
-                        <p>
-                            官方网站：
-                            <a href="http://www.52itstyle.com" style="text-decoration: none; color: #333; font-weight: bold;">www.52itstyle.com</a>
-                        </p>
-                        <p>
-                            服务热线：
-                            <b>
-                                <span style="display: inline-block; margin-right: 16px;">17762018584</span>
-                            </b>
-                        </p>
-                    </td>
-                    <td style="text-align: right;">
-                        <div style=" display: inline-block;width: 120px ; padding-top: 10px; padding-right: 200px;">
-                            <img src="${path}/image/service.jpg" alt="" style="vertical-align: top">
-                        </div>
-                    </td>
-                </tr>
-            </table>
         </div>
     </div>
 </body>

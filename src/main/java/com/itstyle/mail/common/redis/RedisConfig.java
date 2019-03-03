@@ -2,6 +2,9 @@ package com.itstyle.mail.common.redis;
 
 import java.lang.reflect.Method;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.itstyle.mail.common.model.Email;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -70,15 +73,16 @@ public class RedisConfig extends CachingConfigurerSupport {
      *
      */
 	@Bean
-	public RedisTemplate<String, String> redisTemplate(
+	public RedisTemplate<Object, Object> redisTemplate(
 			RedisConnectionFactory factory) {
-		StringRedisTemplate template = new StringRedisTemplate(factory);
+		RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
+		template.setConnectionFactory(factory);
 		setSerializer(template); //使用Jackson序列化
 		template.afterPropertiesSet();
 		return template;
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void setSerializer(StringRedisTemplate template) {
+	private void setSerializer(RedisTemplate template) {
 		Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(
 				Object.class);
 		ObjectMapper om = new ObjectMapper();

@@ -3,6 +3,8 @@ package com.itstyle.mail.service;
 import com.itstyle.mail.common.model.Email;
 import com.itstyle.mail.common.model.Result;
 
+import java.util.Date;
+
 public interface IMailService {
 	 /**
 	  * 纯文本
@@ -72,4 +74,6 @@ public interface IMailService {
 	 
 	 
 	 public Result listMail(Email mail);
+
+	 public Result scheduleMail(Email email, String dateStr);
 }
